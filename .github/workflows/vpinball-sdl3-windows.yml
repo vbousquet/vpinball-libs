@@ -1,0 +1,28 @@
+name: vpinball-sdl3-windows
+on:
+  push:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-2025
+    strategy:
+      matrix:
+        platform:
+          - name: windows-x64
+          - name: windows-x86
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - run: |
+          ${{ matrix.platform.name }}/external.sh
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: libraries-${{ matrix.platform.name }}
+          path: tmp
+
